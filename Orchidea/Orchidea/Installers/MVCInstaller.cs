@@ -1,9 +1,10 @@
-﻿using FluentValidation.AspNetCore;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Orchidea.Commands.Validators.Flower;
+using Orchidea.PipelineBehaviours;
 using System;
 using System.Reflection;
 
@@ -27,7 +28,8 @@ namespace Orchidea.Installers
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Orchidea API", Version = "v1" });
             });
 
-            services.addValidatedHandler
+            services.AddValidatorsFromAssembly(typeof(DeleteFlowerCommandValidator).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
     }
 }

@@ -10,7 +10,10 @@ namespace Orchidea.Commands.Validators.Flower
         public DeleteFlowerCommandValidator(OrchideaContext context)
         {
             RuleFor(x => x.Id)
-             .Must(id => false);
+             .Must(id => context.Flowers.Any(f => f.Id == id) && id != default)
+             .WithMessage("Element is not exist.")
+             .NotEmpty()
+             .WithMessage("Id is null or empty.");
         }
     }
 }
